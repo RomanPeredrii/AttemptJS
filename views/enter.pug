@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= 'ENTER'
+  form(action='/enter-init')
+    | name:
+    br
+    input(type='text', name='name', value='')
+    br
+    br
+    input(type='submit', value='Submit')

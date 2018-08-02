@@ -1,0 +1,16 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+#firstSection {
+  display: flex;
+  flex-direction: row;
+  background: rgb(69, 73, 75);
+}
+.allMessages {
+  background: rgb(221, 201, 22);
+}

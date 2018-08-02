@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  section(id='firstSection')
+    .left
+      h1= title
+      p Welcome to #{title}
+      | name:
+      br
+      input(id='name', type='text', name='name', value=' ')
+      br 
+      br
+      button(onclick='setName()') setName
+      br
+      br
+      .clientsList
+      textarea(id= 'message', cols="100", rows="1")
+      br
+      button(onclick='sendMessage()') sendMessage
+    .right
+      .allMessages
+
