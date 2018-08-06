@@ -10,32 +10,50 @@ var app = require('../app');
 var debug = require('debug')('nextnodeapppug:server');
 var http = require('http');
 
+const fs = require('fs');
+fs.openSync('userData.txt', 'w');
 
+
+/*moment.JS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/ 
+let sysServDate = '';
+let nowDate = new Date();
+sysServDate += nowDate.getHours() + ':'; 
+sysServDate += nowDate.getMinutes()+' ';
+sysServDate += nowDate.getDate() + '.';
+sysServDate += (nowDate.getMonth() + 1) + '.';
+sysServDate += nowDate.getFullYear();
+/*moment.JS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/ 
 
 var serverIo = require('http').createServer();
 var io = require('socket.io')(serverIo);
 
 io.on('connection', function (client) {
   clients.push(client);
-
+  
+  
   client.emit('onConnect', 'Connected');
   client.on('event', function (data) { });
   client.on('disconnect', function () { });
   client.on('userMessage', (message) => {
 
-    console.log('I get message from ', client.nickname, 'client: ', message);
+    if (client.nickname === undefined) client.nickname = 'guest';
+
+    console.log('I get message from ', client.nickname, '-', message, sysServDate);
     let parcel = {
       message,
-      nickname: client.nickname
+      nickname: client.nickname,
+      sysServDate
     }
-
+    
     client.emit('message', parcel);
     client.broadcast.emit('message', parcel);
-
+    let forAppendToFile = parcel.nickname + ': '+ parcel.message + ' '+ parcel.sysServDate + '\n';
+    fs.appendFileSync('userData.txt', forAppendToFile);
   })
 
 
   client.on('identify', function (name) {
+    
     client.nickname = name;
     let ioClients = io.sockets.clients();
 

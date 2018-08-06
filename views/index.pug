@@ -10,13 +10,13 @@ block content
       input(id='name', type='text', name='name', value=' ')
       br 
       br
-      button(onclick='setName()') setName
+      button(id= 'setNameButton', onclick='setName()') setName
       br
       br
       .clientsList
       textarea(id= 'message', cols="100", rows="1")
       br
-      button(onclick='sendMessage()') sendMessage
+      button(id= 'messageButton', onclick='sendMessage()') sendMessage
     .right
       .allMessages
 

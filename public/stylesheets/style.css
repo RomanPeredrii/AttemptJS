@@ -9,8 +9,8 @@ a {
 #firstSection {
   display: flex;
   flex-direction: row;
-  background: rgb(69, 73, 75);
+  background: rgb(121, 201, 241);
 }
 .allMessages {
-  background: rgb(221, 201, 22);
+  background: rgb(242, 245, 65);
 }

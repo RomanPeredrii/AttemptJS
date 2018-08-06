@@ -1,7 +1,5 @@
 
 /*console.log('The main js');
-
-
 let myNextAttempt = async function () {
     console.log('inFunction');
     try {
@@ -15,9 +13,7 @@ let myNextAttempt = async function () {
         console.log(error);
     }
 }
-
 myNextAttempt(); */
-
 //setName.addEventListener('click', () => {
 //alert();
 //});
@@ -25,11 +21,13 @@ myNextAttempt(); */
 const log = console.log;
 const allMessages = document.querySelector('.allMessages');
 const clientsList = document.querySelector('.clientsList');
+const messageButton = document.querySelector('#messageButton');
+const socket = io.connect('http://localhost:3001');
+const setNameButton = document.querySelector('#setNameButton');
 
-let socket = io.connect('http://localhost:3001');
+messageButton.disabled  = true;
 
 socket.on('onConnect', (message) => {
-    //console.log(message);
     socket.emit('userMessage', 'SO WERE ARE HERE');
 });
 
@@ -39,33 +37,35 @@ let setName = () => {
     if (name.value.length > 1) {
         console.log(name.value);
         socket.emit('identify', name.value);
+        messageButton.disabled = false;
+        setNameButton.disabled = true;
     }
     else alert('UNCORRECT USER NAME');
 
 };
 
+
 socket.on('clientList', (clientList) => {
     clientList.map((client) => {
-        if (client.name === undefined) client.name = 'guest'; console.log(client.name)
+        if (client.name === undefined) client.name = 'guest';
+        log(client.name);
+
     });
     clientList.innerHTML = `<div>' '</div>`;
     clientList.map((client) => clientsList.innerHTML += `<div>${client.name}</div>`);
 })
 
-
-
 let sendMessage = () => {
     let message = document.querySelector('#message');
-    console.log(message.value.length);
-    if (message.value.length > 1) {
-        //console.log(message.value);
+    let name = document.querySelector('#name');
+    if ((message.value.length > 1) && (name.value.length > 1)) {
         socket.emit('userMessage', message.value);
     }
-    else alert('EMPTY MESSAGE AREA');
+    else alert('UNCORRECT USER NAME or EMPTY MESSAGE AREA');
 
 };
 
 socket.on('message', (parcel) => {
     log('MESSAGE', parcel.nickname, ' ', parcel.message);
-    allMessages.innerHTML += `<div>${parcel.nickname}:  ${parcel.message}</div>`;
+    allMessages.innerHTML += `<div>${parcel.nickname}:  ${parcel.message} - ${parcel.sysServDate}</div>`;
 });
