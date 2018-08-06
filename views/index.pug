@@ -16,6 +16,9 @@ block content
       .clientsList
       textarea(id= 'message', cols="100", rows="1")
       br
+      .smile(onclick = 'putSmile("🙀")') 🙀
+      .smile(onclick = 'putSmile("😺")') 😺
+      br
       button(id= 'messageButton', onclick='sendMessage()') sendMessage
     .right
       .allMessages

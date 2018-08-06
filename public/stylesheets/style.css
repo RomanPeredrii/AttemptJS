@@ -7,10 +7,19 @@ a {
   color: #00B7FF;
 }
 #firstSection {
+  padding: 10px;
   display: flex;
   flex-direction: row;
   background: rgb(121, 201, 241);
 }
 .allMessages {
+  text-align: right;
+  padding: 10px;
   background: rgb(242, 245, 65);
+}
+.left {
+  width: 50%
+}
+.right {
+  width: 50%
 }

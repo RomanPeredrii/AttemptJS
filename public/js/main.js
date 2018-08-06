@@ -24,6 +24,8 @@ const clientsList = document.querySelector('.clientsList');
 const messageButton = document.querySelector('#messageButton');
 const socket = io.connect('http://localhost:3001');
 const setNameButton = document.querySelector('#setNameButton');
+const message = document.querySelector('#message');
+
 
 messageButton.disabled  = true;
 
@@ -55,17 +57,24 @@ socket.on('clientList', (clientList) => {
     clientList.map((client) => clientsList.innerHTML += `<div>${client.name}</div>`);
 })
 
+
 let sendMessage = () => {
-    let message = document.querySelector('#message');
-    let name = document.querySelector('#name');
-    if ((message.value.length > 1) && (name.value.length > 1)) {
+    
+    if (message.value.length > 1) {
         socket.emit('userMessage', message.value);
+        
     }
-    else alert('UNCORRECT USER NAME or EMPTY MESSAGE AREA');
+    else alert('EMPTY MESSAGE AREA');
 
 };
 
 socket.on('message', (parcel) => {
     log('MESSAGE', parcel.nickname, ' ', parcel.message);
     allMessages.innerHTML += `<div>${parcel.nickname}:  ${parcel.message} - ${parcel.sysServDate}</div>`;
+   
 });
+
+let putSmile = (smile) => {
+    log(smile);
+    message.value += smile;
+};
