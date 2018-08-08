@@ -27,11 +27,11 @@ const setNameButton = document.querySelector('#setNameButton');
 const message = document.querySelector('#message');
 
 
-messageButton.disabled  = true;
-
+messageButton.disabled = true;
+/*
 socket.on('onConnect', (message) => {
     socket.emit('userMessage', 'SO WERE ARE HERE');
-});
+});*/
 
 let setName = () => {
     let name = document.querySelector('#name');
@@ -46,23 +46,24 @@ let setName = () => {
 
 };
 
+let showClientList = () => {
+    socket.on('clientList', (clientList) => {
+        clientList.map((client) => {
+            if (client.name === undefined) client.name = 'guest';
+            log(client.name);
 
-socket.on('clientList', (clientList) => {
-    clientList.map((client) => {
-        if (client.name === undefined) client.name = 'guest';
-        log(client.name);
-
+        });
+        clientList.innerHTML = `<div>' '</div>`;
+        clientList.map((client) => clientsList.innerHTML += `<div>${client.name}</div>`);
     });
-    clientList.innerHTML = `<div>' '</div>`;
-    clientList.map((client) => clientsList.innerHTML += `<div>${client.name}</div>`);
-})
-
-
+}
+showClientList();
 let sendMessage = () => {
-    
+
     if (message.value.length > 1) {
         socket.emit('userMessage', message.value);
-        
+        message.value = '';
+        showClientList();
     }
     else alert('EMPTY MESSAGE AREA');
 
@@ -70,8 +71,8 @@ let sendMessage = () => {
 
 socket.on('message', (parcel) => {
     log('MESSAGE', parcel.nickname, ' ', parcel.message);
-    allMessages.innerHTML += `<div>${parcel.nickname}:  ${parcel.message} - ${parcel.sysServDate}</div>`;
-   
+    allMessages.innerHTML += `<div>${parcel.sysServDate} - ${parcel.nickname}: <br>  ${parcel.message} </div>`;
+
 });
 
 let putSmile = (smile) => {

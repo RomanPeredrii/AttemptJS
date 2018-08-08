@@ -13,7 +13,6 @@ a {
   background: rgb(121, 201, 241);
 }
 .allMessages {
-  text-align: right;
   padding: 10px;
   background: rgb(242, 245, 65);
 }
@@ -22,4 +21,13 @@ a {
 }
 .right {
   width: 50%
+}
+.smile {
+  display: inline-block;
+  font-size: 1.5em;
+}
+#message {
+  display: block;
+  min-width: 100%;
+  min-height: 5em
 }
