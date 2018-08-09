@@ -35,9 +35,9 @@ socket.on('onConnect', (message) => {
 
 let setName = () => {
     let name = document.querySelector('#name');
-    console.log(name.value.length);
+    //console.log(name.value.length);
     if (name.value.length > 1) {
-        console.log(name.value);
+        //  console.log(name.value);
         socket.emit('identify', name.value);
         messageButton.disabled = false;
         setNameButton.disabled = true;
@@ -46,26 +46,28 @@ let setName = () => {
 
 };
 
-let showClientList = () => {
-    socket.on('clientList', (clientList) => {
-        clientList.map((client) => {
-            if (client.name === undefined) client.name = 'guest';
-            log(client.name);
 
-        });
-        clientList.innerHTML = `<div>' '</div>`;
-        clientList.map((client) => clientsList.innerHTML += `<div>${client.name}</div>`);
+socket.on('clientList', (clientList) => {
+  
+    clientsList.innerHTML = `<div></div>`;
+
+    clientList.map((client) => {
+        if (client.name === undefined) client.name = 'guest';
+        log(client.name);
+        clientsList.innerHTML += `<div>${client.name}</div>`;
     });
-}
-showClientList();
+
+    
+});
+
+
 let sendMessage = () => {
 
     if (message.value.length > 1) {
         socket.emit('userMessage', message.value);
         message.value = '';
-        showClientList();
     }
-    else alert('EMPTY MESSAGE AREA');
+    else alert('EMPTY MESSAGE AREA')
 
 };
 
@@ -78,4 +80,4 @@ socket.on('message', (parcel) => {
 let putSmile = (smile) => {
     log(smile);
     message.value += smile;
-};
+}
