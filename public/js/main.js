@@ -73,7 +73,7 @@ let sendMessage = () => {
 
 socket.on('message', (parcel) => {
     log('MESSAGE', parcel.nickname, ' ', parcel.message);
-    allMessages.innerHTML += `<div>${parcel.sysServDate} - ${parcel.nickname}: <br>  ${parcel.message} </div>`;
+    allMessages.innerHTML += `<div>${parcel.dateTimeForChat} - ${parcel.nickname}: <br>  ${parcel.message} </div>`;
 
 });
 

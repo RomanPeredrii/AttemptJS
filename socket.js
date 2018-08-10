@@ -3,12 +3,18 @@ var http = require('http');
 //const io = require('socket.io')
 var clients = [];
 var clientsFront = [];
+
+const moment = require('moment');
+var dateTimeForChat = moment().locale('us').format('MMMM Do YYYY, hh:mm:ss a')
+var logFileName = './logs/' + moment().format('DD_MM_YY_hh_mm')+'.txt';
+
 const fs = require('fs');
-fs.openSync('userData.txt', 'w');
+fs.openSync(logFileName, 'w');
+
+log(dateTimeForChat);
 
 
-
-/*moment.JS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+/*moment.JS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 let sysServDate = '';
 let nowDate = new Date();
 sysServDate += nowDate.getHours() + ':';
@@ -33,17 +39,17 @@ io.on('connection', function (client) {
 
     if (client.nickname === undefined) client.nickname = 'guest';
 
-    console.log('I get message from ', client.nickname, '-', message, sysServDate);
+    console.log('I get message from ', client.nickname, '-', message, dateTimeForChat);
     let parcel = {
       message,
       nickname: client.nickname,
-      sysServDate,
+      dateTimeForChat,
 
     }
     client.emit('message', parcel);
     client.broadcast.emit('message', parcel);
-    let forAppendToFile = parcel.nickname + ': ' + parcel.message + ' ' + parcel.sysServDate + '\n';
-    fs.appendFileSync('userData.txt', forAppendToFile);
+    let forAppendToFile = parcel.nickname + ': ' + parcel.message + ' - ' + parcel.dateTimeForChat + '\n';
+    fs.appendFileSync(logFileName, forAppendToFile);
     clientsListRefresh();
   })
 
