@@ -17,8 +17,15 @@ myNextAttempt(); */
 //setName.addEventListener('click', () => {
 //alert();
 //});
-
 const log = console.log;
+
+import * as checkF from './uploadFiles.js'
+
+checkF.check();
+
+// log(uploadFiles);
+
+
 const allMessages = document.querySelector('.allMessages');
 const clientsList = document.querySelector('.clientsList');
 const messageButton = document.querySelector('#messageButton');

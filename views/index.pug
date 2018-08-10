@@ -1,8 +1,13 @@
 extends layout
 
 block content
+  
   section(id='firstSection')
+
     .left
+      input#files(type='file', name='files[]', multiple='')
+      #drop_zone Drop files here
+      output#list
       h1= title
       p Welcome to #{title}
       | name:

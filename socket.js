@@ -1,5 +1,5 @@
 const log = console.log;
-var http = require('http');
+const http = require('http');
 //const io = require('socket.io')
 var clients = [];
 var clientsFront = [];
@@ -12,17 +12,6 @@ const fs = require('fs');
 fs.openSync(logFileName, 'w');
 
 log(dateTimeForChat);
-
-
-/*moment.JS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-let sysServDate = '';
-let nowDate = new Date();
-sysServDate += nowDate.getHours() + ':';
-sysServDate += nowDate.getMinutes() + ' ';
-sysServDate += nowDate.getDate() + '.';
-sysServDate += (nowDate.getMonth() + 1) + '.';
-sysServDate += nowDate.getFullYear();
-/*moment.JS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 var serverIo = http.createServer();
 var io = require('socket.io')(serverIo);
