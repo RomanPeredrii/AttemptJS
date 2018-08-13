@@ -17,13 +17,14 @@ myNextAttempt(); */
 //setName.addEventListener('click', () => {
 //alert();
 //});
+
 const log = console.log;
 
-import * as checkF from './uploadFiles.js'
+//import * as checkF from './uploadFiles.js';
 
-checkF.check();
+//checkF.check();
 
-// log(uploadFiles);
+//log(uploadFiles);
 
 
 const allMessages = document.querySelector('.allMessages');
@@ -52,6 +53,7 @@ let setName = () => {
     else alert('UNCORRECT USER NAME');
 
 };
+
 
 
 socket.on('clientList', (clientList) => {

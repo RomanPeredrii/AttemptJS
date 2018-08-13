@@ -1,4 +1,5 @@
-const check = () => { console.log('CHECKED!!!') };
+
+var check = () => { console.log('CHECKED!!!') };
  //check();
 function handleFileSelect(evt) {
   evt.stopPropagation();

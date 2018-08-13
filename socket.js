@@ -6,7 +6,11 @@ var clientsFront = [];
 
 const moment = require('moment');
 var dateTimeForChat = moment().locale('us').format('MMMM Do YYYY, hh:mm:ss a')
-var logFileName = './logs/' + moment().format('DD_MM_YY_hh_mm')+'.txt';
+
+let hh = moment().format('hh');
+if (moment().format('a') === 'pm') {
+hh = +hh + 12;}
+var logFileName = './logs/' + moment().format('YY_MM_DD_')+ hh + moment().format('_mm') +'.txt';
 
 const fs = require('fs');
 fs.openSync(logFileName, 'w');
