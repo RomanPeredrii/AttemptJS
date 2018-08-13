@@ -1,10 +1,9 @@
 const log = console.log;
 
-//import * as checkF from './uploadFiles.js';
+import {check} from './uploadFiles.js';
 
-//checkF.check();
+check();
 
-//log(uploadFiles);
 
 
 const allMessages = document.querySelector('.allMessages');
@@ -14,27 +13,15 @@ const socket = io.connect('http://localhost:3001');
 const setNameButton = document.querySelector('#setNameButton');
 const message = document.querySelector('#message');
 
+import {setName} from './chatFunction.js';
+
+setNameButton.addEventListener('click', () => setName(socket));
 
 messageButton.disabled = true;
-/*
+
 socket.on('onConnect', (message) => {
     socket.emit('userMessage', 'SO WERE ARE HERE');
-});*/
-
-let setName = () => {
-    let name = document.querySelector('#name');
-    //console.log(name.value.length);
-    if (name.value.length > 1) {
-        //  console.log(name.value);
-        socket.emit('identify', name.value);
-        messageButton.disabled = false;
-        setNameButton.disabled = true;
-    }
-    else alert('UNCORRECT USER NAME');
-
-};
-
-
+});
 
 socket.on('clientList', (clientList) => {
   
@@ -49,7 +36,12 @@ socket.on('clientList', (clientList) => {
     
 });
 
+socket.on('message', (parcel) => {
+    log('MESSAGE', parcel.nickname, ' ', parcel.message);
+    allMessages.innerHTML += `<div>${parcel.dateTimeForChat} - ${parcel.nickname}: <br>  ${parcel.message} </div>`;
 
+}); 
+/*
 let sendMessage = () => {
 
     if (message.value.length > 1) {
@@ -60,13 +52,21 @@ let sendMessage = () => {
 
 };
 
-socket.on('message', (parcel) => {
-    log('MESSAGE', parcel.nickname, ' ', parcel.message);
-    allMessages.innerHTML += `<div>${parcel.dateTimeForChat} - ${parcel.nickname}: <br>  ${parcel.message} </div>`;
+*/
 
-});
+const smiles = document.querySelector('.smiles');
 
-let putSmile = (smile) => {
-    log(smile);
-    message.value += smile;
-}
+'😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😗 😙 😚 ☺️ 🙂 🤗 🤩 🤔 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🤑 😲 ☹️ 🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 😳 🤪 😵 😡 😠 🤬 😷 🤒 🤕 🤢 🤮 🤧 😇 🤠 🤡 🤥 🤫 🤭 🧐 🤓 😈 👿 👹 👺 💀 👻 👽 '
+    .split(' ')
+    .map((smile) => smiles.innerHTML += '<div class="smile">' + smile + '</div>');
+const smilesAll = document.querySelector('.smiles');
+
+let smileArray = Array.from(smilesAll);
+smileArray.map((ell) => log(ell));
+
+//for(let i in smileArray) {log(i)}; 
+//let lengthSmiles = smilesAll.length;
+//log("lengthSmiles");
+//log(smilesAll);
+
+

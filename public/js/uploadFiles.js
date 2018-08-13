@@ -1,7 +1,9 @@
 
-var check = () => { console.log('CHECKED!!!') };
- //check();
-function handleFileSelect(evt) {
+ let check = () => { console.log('CHECKED!!!')};
+
+ export {check};
+
+ function handleFileSelect(evt) {
   evt.stopPropagation();
   evt.preventDefault();
 
