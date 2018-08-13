@@ -1,23 +1,3 @@
-
-/*console.log('The main js');
-let myNextAttempt = async function () {
-    console.log('inFunction');
-    try {
-        let fromGit = await fetch('/api');
-        console.log(fromGit);
-        let fromGitNext = fromGit.json();
-        let fromGitNext2 = await fromGitNext;
-        console.log(fromGitNext2);
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-myNextAttempt(); */
-//setName.addEventListener('click', () => {
-//alert();
-//});
-
 const log = console.log;
 
 //import * as checkF from './uploadFiles.js';

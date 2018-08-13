@@ -1,6 +1,5 @@
 const log = console.log;
 const http = require('http');
-//const io = require('socket.io')
 var clients = [];
 var clientsFront = [];
 
@@ -11,7 +10,7 @@ let hh = moment().format('hh');
 if (moment().format('a') === 'pm') {
 hh = +hh + 12;}
 var logFileName = './logs/' + moment().format('YY_MM_DD_')+ hh + moment().format('_mm') +'.txt';
-
+log(logFileName);
 const fs = require('fs');
 fs.openSync(logFileName, 'w');
 
