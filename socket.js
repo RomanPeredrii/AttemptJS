@@ -8,8 +8,10 @@ var dateTimeForChat = moment().locale('us').format('MMMM Do YYYY, hh:mm:ss a')
 
 let hh = moment().format('hh');
 if (moment().format('a') === 'pm') {
-hh = +hh + 12;}
-var logFileName = './logs/' + moment().format('YY_MM_DD_')+ hh + moment().format('_mm') +'.txt';
+  hh = +hh + 12;
+}
+
+var logFileName = './logs/' + moment().format('YY_MM_DD_') + hh + moment().format('_mm') + '.txt';
 log(logFileName);
 const fs = require('fs');
 fs.openSync(logFileName, 'w');
@@ -35,8 +37,7 @@ io.on('connection', function (client) {
     let parcel = {
       message,
       nickname: client.nickname,
-      dateTimeForChat,
-
+      dateTimeForChat
     }
     client.emit('message', parcel);
     client.broadcast.emit('message', parcel);

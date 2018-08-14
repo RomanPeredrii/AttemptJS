@@ -8,8 +8,21 @@ let setName = (socket) => {
         messageButton.disabled = false;
         setNameButton.disabled = true;
     }
-    else alert('UNCORRECT USER NAME');
+    else alert('INCORRECT USER NAME');
 
 };
 
-export {setName};
+
+let sendMessage = (socket) => {
+    let message = document.querySelector('#message');
+    if (message.value.length > 1) {
+        socket.emit('userMessage', message.value);
+        message.value = '';
+    }
+    else alert('EMPTY MESSAGE AREA')
+
+};
+
+
+export { sendMessage };
+export { setName };
