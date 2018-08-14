@@ -23,6 +23,11 @@ let sendMessage = (socket) => {
 
 };
 
+let putSmile = (smile) => {
+    let message = document.querySelector('#message');
+    message.value += smile;
+};
 
 export { sendMessage };
 export { setName };
+export { putSmile };
