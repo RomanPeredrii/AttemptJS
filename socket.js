@@ -23,7 +23,7 @@ var io = require('socket.io')(serverIo);
 
 io.on('connection', function (client) {
   clients.push(client);
-
+  
   client.emit('onConnect', 'Connected');
   client.on('event', function (data) { });
   client.on('disconnect', function () {
