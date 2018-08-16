@@ -5,6 +5,7 @@ import { check } from './uploadFiles.js';
 check();
 
 
+document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
 const allMessages = document.querySelector('.allMessages');
 const clientsList = document.querySelector('.clientsList');
@@ -20,6 +21,9 @@ import { sendMessage } from './chatFunction.js';
 messageButton.addEventListener('click', () => sendMessage(socket));
 
 import { putSmile } from './chatFunction.js';
+
+import { handleFileSelect } from './uploadFiles.js';
+
 
 
 messageButton.disabled = true;
