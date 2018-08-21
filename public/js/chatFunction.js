@@ -7,6 +7,7 @@ let setName = (socket) => {
         socket.emit('identify', name.value);
         messageButton.disabled = false;
         setNameButton.disabled = true;
+        files.disabled = false;
     }
     else alert('INCORRECT USER NAME');
 

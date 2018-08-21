@@ -1,6 +1,6 @@
+//import { sendMessage } from "./chatFunction";
 
-let check = () => { console.log('CHECKED!!!') };
-export { check };
+
 
 const log = console.log;
 /*
@@ -29,33 +29,55 @@ function handleDragOver(evt) {
 }
 
 // Setup the dnd listeners.
-var dropZone = document.getElementById('drop_zone');
+var dropZone = document.getElementById('message');
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('drop', handleFileSelect, false);
 
 
-function handleFileSelect(e) {
+function handleFileSelect(e, socket) {
   var files = e.target.files; // FileList object
   
   // Loop through the FileList and render image files as thumbnails.
   for (var i = 0, f; f = files[i]; i++) {
-    log(e);
+    log(files);
     // Only process image files.
     if (!f.type.match('image.*')) continue;
     let slice = f.slice(0, 1000);
     var reader = new FileReader();
-    //    reader.readAsBinaryString(slice);
-    reader.readAsDataURL(f);
+    var binaryReader = new FileReader();   // for read binary data
+    binaryReader.readAsBinaryString(slice);
+    socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    binaryReader.onload = (function (f, socket) {
+      return function (e, socket) {
 
+        log('file', e);
+
+        log('OUTPUT', e.target.result);
+
+       
+
+        //let arr = new Int8Array(e.target.result);
+       // log(arr);
+        //let output = JSON.stringify(arr, null, '  ');
+      }
+
+    })(f, e, socket);
+
+
+    reader.readAsDataURL(f);
     reader.onload = (function (f) {
       return function (e) {
         let allMessages = document.querySelector('.allMessages');
         allMessages.innerHTML += `<img src=" ${e.target.result} " title=" ${escape(f.name)}"/>`
-        log('target', e.target.result);
+        //log('target', e.target.result);
         //log('file', f);
-        log(escape(f.name));
+        //log(escape(f.name));
       }
     })(f, e);
+
+
+
+
 
 
     /*
@@ -64,7 +86,7 @@ function handleFileSelect(e) {
       log('target', event.target.result);
       log('file', f);
       log(escape(f.name));
-
+  
     };*/
 
     // Read in the image file as a data URL.

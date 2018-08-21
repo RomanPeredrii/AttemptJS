@@ -5,14 +5,11 @@ block content
   section(id='firstSection')
 
     .left
-      input#files(type='file', name='files[]', multiple='')
-      #drop_zone Drop files here
-      output#list
       h1= title
       p Welcome to #{title}
       | name:
       br
-      input(id='name', type='text', name='name', value=' ')
+      input(id='name', type='text', name='name', value='')
       br 
       br
       button(id= 'setNameButton') setName
@@ -24,6 +21,8 @@ block content
       .smiles
       br
       button(id= 'messageButton') sendMessage
+      input(id= 'files', type='file', name='files[]', multiple='')
+      output(id= 'list')
     .right
       .allMessages
 

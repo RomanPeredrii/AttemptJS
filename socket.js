@@ -1,10 +1,10 @@
 const log = console.log;
 const http = require('http');
+const moment = require('moment');
 var clients = [];
 var clientsFront = [];
 
-const moment = require('moment');
-var dateTimeForChat = moment().locale('us').format('MMMM Do YYYY, hh:mm:ss a')
+var dateTime = () => {return (moment().locale('us').format('MMMM Do YYYY, hh:mm:ss a'))}
 
 let hh = moment().format('hh');
 if (moment().format('a') === 'pm') {
@@ -16,7 +16,7 @@ log(logFileName);
 const fs = require('fs');
 fs.openSync(logFileName, 'w');
 
-log(dateTimeForChat);
+log(dateTime());
 
 var serverIo = http.createServer();
 var io = require('socket.io')(serverIo);
@@ -34,6 +34,7 @@ io.on('connection', function (client) {
     if (client.nickname === undefined) client.nickname = 'guest';
 
     console.log('I get message from ', client.nickname, '-', message, dateTimeForChat);
+    var dateTimeForChat = dateTime();
     let parcel = {
       message,
       nickname: client.nickname,
