@@ -8,6 +8,8 @@ const socket = io.connect('http://localhost:3001');
 const setNameButton = document.querySelector('#setNameButton');
 const message = document.querySelector('#message');
 
+window.socket = socket;
+
 import { setName } from './chatFunction.js';
 setNameButton.addEventListener('click', () => setName(socket));
 

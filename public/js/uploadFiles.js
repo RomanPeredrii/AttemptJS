@@ -18,14 +18,14 @@ function handleFileSelect(evt) {
 */
 
 function filesExecute(e, socket) {
-  
- log('UF_SOCKET', socket);
- log('UF_EVENT', e);
- handleFileSelect(e);
+
+  log('UF_SOCKET', socket);
+  log('UF_EVENT', e);
+  handleFileSelect(e);
 
 
 
-//socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+  //socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
   function handleDragOver(evt) {
     evt.stopPropagation();
     evt.preventDefault();
@@ -42,7 +42,6 @@ function filesExecute(e, socket) {
   function handleFileSelect(e) {
 
     var files = e.target.files; // FileList object
-    //socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
     // Loop through the FileList and render image files as thumbnails.
     for (var i = 0, f; f = files[i]; i++) {
       log(files);
@@ -53,24 +52,36 @@ function filesExecute(e, socket) {
       var binaryReader = new FileReader();   // for read binary data
       binaryReader.readAsBinaryString(slice);
 
-      socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 
-      binaryReader.onload = (function (e, f, socket) {
-        return function (e, f, socket) {
+      /*
+            binaryReader.onload = (function (e, f, socket) {
+              return function (e, f, socket) {
+      
+                // log('file', e);
+                socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'); 
+                log('OUTPUT', e.target.result);
+      
+                
+      
+                
+              }
+      
+            })(e, f, socket);
+      */
 
-          // log('file', e);
 
-          log('OUTPUT', e.target.result);
+      binaryReader.onload = (e, f, socket) => {
+        log('BinaryUF_EVENT', e);
+        log('BinaryUF_SOCKET', window.socket);
+        
+        let arr = new Int8Array;
+        arr = [e.target.result];
+        log(arr);
+        let output = JSON.stringify(arr, null, '  ');
+        log(output);
+        window.socket.emit('userMessage', output);
 
-          let arr = new Int8Array;
-          arr = [e.target.result];
-          log(arr);
-          let output = JSON.stringify(arr, null, '  ');
-          log(output);
-        }
-
-      })(e, f, socket);
-
+      };
 
       reader.readAsDataURL(f);
       reader.onload = (function (f) {
@@ -79,7 +90,7 @@ function filesExecute(e, socket) {
           allMessages.innerHTML += `<img src=" ${e.target.result}" title=" ${escape(f.name)}"/>`
           //log('target', e.target.result);
           //log('file', f);
-          log(escape(f.name));
+          //log(escape(f.name));
         }
       })(f, e);
 
