@@ -1,4 +1,6 @@
 
+const log = console.log;
+
 let setName = (socket) => {
     let name = document.querySelector('#name');
     //console.log(name.value.length);
@@ -15,6 +17,9 @@ let setName = (socket) => {
 
 
 let sendMessage = (socket) => {
+   
+    log('SM', socket);
+    
     let message = document.querySelector('#message');
     if (message.value.length > 1) {
         socket.emit('userMessage', message.value);

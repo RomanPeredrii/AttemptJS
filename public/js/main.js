@@ -16,23 +16,34 @@ messageButton.addEventListener('click', () => sendMessage(socket));
 
 import { putSmile } from './chatFunction.js';
 
-import { handleFileSelect } from './uploadFiles.js';
+//import { handleFileSelect } from './uploadFiles.js';
+import { filesExecute } from './uploadFiles.js';
+//document.getElementById('files').addEventListener('change', (() => { return (e, socket) => { filesExecute(e, socket); log('MAIN', socket) } })(socket));
+
+document.getElementById('files').addEventListener('change', (e) => {
+    log('MAIN_EVENT', e); 
+    log('MAIN_SOCKET', socket)
+
+ filesExecute(e, socket); 
+
+
+});
+
+
 
 
 
 messageButton.disabled = true;
 files.disabled = true;
 
+
+
 socket.on('onConnect', (message) => {
 
-
-    // socket.emit('userMessage', 'SO WERE ARE HERE');
-    document.getElementById('files').addEventListener('change', (() => {
-        return (e, socket) => { handleFileSelect(e, socket) }
-    })(socket));
+    
 
 
-
+    socket.emit('userMessage', 'SO WERE ARE HERE');
 
 });
 
@@ -40,7 +51,6 @@ socket.on('clientList', (clientList) => {
     clientsList.innerHTML = `<div></div>`;
     clientList.map((client) => {
         if (client.name === undefined) client.name = 'guest';
-        //log(client.name);
         clientsList.innerHTML += `<div>${client.name}</div>`;
     });
 });
@@ -54,13 +64,11 @@ let smileArray = '😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 �
     .split(' ')
     .map((smile) => smiles.innerHTML += '<div class="smile">' + smile + '</div>');
 let smilesAllNodeList = document.querySelectorAll('.smiles');
-//log(smilesAllNodeList[0].childNodes.length);
 for (let i in smileArray) {
-    // log(smilesAllNodeList[0].childNodes.item(i))
     var smileFromNodeList = smilesAllNodeList[0].childNodes.item(i).firstChild.data;
     var smileNodeList = smilesAllNodeList[0].childNodes.item(i);
     smileNodeList.addEventListener('click', (smileFromNodeList) => {
-        log(smileFromNodeList.target.childNodes[0].data);
+      //  log(smileFromNodeList.target.childNodes[0].data);
         putSmile(smileFromNodeList.target.childNodes[0].data);
 
         // log(smileFromNodeList.path[0].outerText);
@@ -70,5 +78,3 @@ for (let i in smileArray) {
         // putSmile(smileFromNodeList.explicitOriginalTarget.data);
     })
 };
-
-
