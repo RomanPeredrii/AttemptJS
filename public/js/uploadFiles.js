@@ -19,13 +19,10 @@ function handleFileSelect(evt) {
 
 function filesExecute(e, socket) {
 
-  log('UF_SOCKET', socket);
-  log('UF_EVENT', e);
+  // log('UF_SOCKET', socket);
+  // log('UF_EVENT', e);
   handleFileSelect(e);
 
-
-
-  //socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
   function handleDragOver(evt) {
     evt.stopPropagation();
     evt.preventDefault();
@@ -44,42 +41,30 @@ function filesExecute(e, socket) {
     var files = e.target.files; // FileList object
     // Loop through the FileList and render image files as thumbnails.
     for (var i = 0, f; f = files[i]; i++) {
-      log(files);
+      //log(files);
       // Only process image files.
-      if (!f.type.match('image.*')) continue;
-      let slice = f.slice(0, 1000);
+      //if (!f.type.match('image.*')) continue;
+
+      log(f.size);
+      let slice = f.slice(0, f.size);
       var reader = new FileReader();
       var binaryReader = new FileReader();   // for read binary data
-      binaryReader.readAsBinaryString(slice);
+      binaryReader.readAsBinaryString(f);
 
-
-      /*
-            binaryReader.onload = (function (e, f, socket) {
-              return function (e, f, socket) {
-      
-                // log('file', e);
-                socket.emit('userMessage', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'); 
-                log('OUTPUT', e.target.result);
-      
-                
-      
-                
-              }
-      
-            })(e, f, socket);
-      */
 
 
       binaryReader.onload = (e, f, socket) => {
-        log('BinaryUF_EVENT', e);
-        log('BinaryUF_SOCKET', window.socket);
-        
-        let arr = new Int8Array;
-        arr = [e.target.result];
-        log(arr);
-        let output = JSON.stringify(arr, null, '  ');
-        log(output);
-        window.socket.emit('userMessage', output);
+        // log('BinaryUF_EVENT', e);
+        // log('BinaryUF_SOCKET', window.socket);
+
+        //let arr = new Int16Array;
+        //arr = [e.target.result];
+        //log(arr);
+        //let output = JSON.stringify(arr);
+        //log('array16', arr);
+        //log('target', e.target);
+        //window.socket.emit('userMessage', );
+       // window.socket.emit('uploadFile', output);
 
       };
 
@@ -88,27 +73,13 @@ function filesExecute(e, socket) {
         return function (e) {
           let allMessages = document.querySelector('.allMessages');
           allMessages.innerHTML += `<img src=" ${e.target.result}" title=" ${escape(f.name)}"/>`
-          //log('target', e.target.result);
+          log('target', e.target.result);
+          window.socket.emit('uploadFile', e.target.result);
           //log('file', f);
           //log(escape(f.name));
         }
       })(f, e);
 
-
-
-
-
-
-      /*
-      (f, event) => {
-        allMessages += `<img class="thumb" src=" ${event.target.result} "title=" ${escape(f.name)}"/>`
-        log('target', event.target.result);
-        log('file', f);
-        log(escape(f.name));
-    
-      };*/
-
-      // Read in the image file as a data URL.
 
     }
   }

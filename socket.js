@@ -4,7 +4,7 @@ const moment = require('moment');
 var clients = [];
 var clientsFront = [];
 
-var dateTime = () => {return (moment().locale('us').format('MMMM Do YYYY, hh:mm:ss a'))}
+var dateTime = () => { return (moment().locale('us').format('MMMM Do YYYY, hh:mm:ss a')) }
 
 let hh = moment().format('hh');
 if (moment().format('a') === 'pm') {
@@ -23,9 +23,11 @@ var io = require('socket.io')(serverIo);
 
 io.on('connection', function (client) {
   clients.push(client);
-  
+
   client.emit('onConnect', 'Connected');
+  /***************************************/
   client.on('event', function (data) { });
+  /****************************************/
   client.on('disconnect', function () {
     clientsListRefresh();
   });
@@ -67,6 +69,32 @@ io.on('connection', function (client) {
     client.emit('clientList', clientsFront);
     client.broadcast.emit('clientList', clientsFront);
   };
+
+  client.on('uploadFile', (binaryFile) => {
+
+
+    var base64Data = binaryFile.replace(/^data:image\/jpeg;base64,/, "");
+
+    fs.writeFile("out.jpeg", base64Data, 'base64', function (err) {
+      console.log(err);
+    });
+
+    //e.target.result
+    //fs.openSync('buff.bin', 'w');
+    log(binaryFile);
+    fs.writeFile('buff.jpeg', binaryFile, function (err) {
+      if (err) throw err;
+      log('Saved!');
+    });
+    fs.writeFile('buff.bin', binaryFile, function (err) {
+      if (err) throw err;
+      log('Saved!');
+    });
+    fs.writeFile('buff.txt', binaryFile, function (err) {
+      if (err) throw err;
+      log('Saved!');
+    });
+  })
 });
 serverIo.listen(3001);
 

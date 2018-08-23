@@ -8,7 +8,7 @@
 var app = require('../app');
 var debug = require('debug')('nextnodeapppug:server');
 var http = require('http');
-const soket = require('../socket.js')
+const socket = require('../socket.js')
 
 
 

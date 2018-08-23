@@ -23,8 +23,8 @@ import { filesExecute } from './uploadFiles.js';
 //document.getElementById('files').addEventListener('change', (() => { return (e, socket) => { filesExecute(e, socket); log('MAIN', socket) } })(socket));
 
 document.getElementById('files').addEventListener('change', (e) => {
-    log('MAIN_EVENT', e); 
-    log('MAIN_SOCKET', socket)
+  //  log('MAIN_EVENT', e); 
+ //   log('MAIN_SOCKET', socket)
 
  filesExecute(e, socket); 
 
@@ -38,12 +38,7 @@ document.getElementById('files').addEventListener('change', (e) => {
 messageButton.disabled = true;
 files.disabled = true;
 
-
-
 socket.on('onConnect', (message) => {
-
-    
-
 
     socket.emit('userMessage', 'SO WERE ARE HERE');
 
