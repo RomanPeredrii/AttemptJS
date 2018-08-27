@@ -71,31 +71,21 @@ io.on('connection', function (client) {
   };
 
   client.on('uploadFile', (binaryFile) => {
-
-
     var base64Data = binaryFile.replace(/^data:image\/jpeg;base64,/, "");
+        fs.writeFile("buff.jpeg", base64Data, 'binary', function (err) {
 
-    fs.writeFile("out.jpeg", base64Data, 'base64', function (err) {
-      console.log(err);
-    });
 
-    //e.target.result
-    //fs.openSync('buff.bin', 'w');
-    log(binaryFile);
-    fs.writeFile('buff.jpeg', binaryFile, function (err) {
-      if (err) throw err;
+    //fs.writeFile("buff.jpeg", base64Data, 'base64', function (err) {
+      if (err) {
+        log(err); throw err
+      }
       log('Saved!');
     });
-    fs.writeFile('buff.bin', binaryFile, function (err) {
-      if (err) throw err;
-      log('Saved!');
-    });
-    fs.writeFile('buff.txt', binaryFile, function (err) {
-      if (err) throw err;
-      log('Saved!');
-    });
+    
   })
 });
 serverIo.listen(3001);
+
+
 
 module.exports = {};
