@@ -21,12 +21,21 @@ log(dateTime());
 var serverIo = http.createServer();
 var io = require('socket.io')(serverIo);
 
+
+
 io.on('connection', function (client) {
   clients.push(client);
-
+  //fs.openSync('./buff/'+ client.id, 'w');
   client.emit('onConnect', 'Connected');
   /***************************************/
-  client.on('event', function (data) { });
+  client.on('blob', function (data) {
+    log('CLIENT', client.id);
+    //fs.appendFile('./buff/'+ client.id, data, () => {});
+    log('data: ', data);
+    client.broadcast.emit('stream', data);
+    client.emit('stream', data);
+
+  });
   /****************************************/
   client.on('disconnect', function () {
     clientsListRefresh();
@@ -72,16 +81,16 @@ io.on('connection', function (client) {
 
   client.on('uploadFile', (binaryFile) => {
     var base64Data = binaryFile.replace(/^data:image\/jpeg;base64,/, "");
-        fs.writeFile("buff.jpeg", base64Data, 'binary', function (err) {
+    fs.writeFile("buff.jpeg", base64Data, 'binary', function (err) {
 
 
-    //fs.writeFile("buff.jpeg", base64Data, 'base64', function (err) {
+      //fs.writeFile("buff.jpeg", base64Data, 'base64', function (err) {
       if (err) {
         log(err); throw err
       }
       log('Saved!');
     });
-    
+
   })
 });
 serverIo.listen(3001);

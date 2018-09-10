@@ -32,3 +32,11 @@ a {
   min-width: 100%;
   min-height: 5em
 }
+#videoLocal {
+  width: 320px;
+  background: gray;
+}
+#videoRemote {
+  width: 320px;
+  background: rgb(32, 19, 19);
+}

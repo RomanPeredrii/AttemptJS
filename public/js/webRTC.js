@@ -1,4 +1,78 @@
-let localConnection;
+const log = console.log;
+
+var binaryVideoData = [];
+
+ var getVideoStream = function () {
+  let videoRemote = document.querySelector('#videoRemote');
+  socket.on('stream', (data) => {
+    binaryVideoData.push(data);
+
+
+    log('CONTROL', data);
+    videoRemote.src = window.URL.createObjectURL(new Blob(binaryVideoData, {type: 'video/webm'}));
+    videoRemote.play();
+  });
+};
+
+var VideoConnection = function () {
+
+  navigator.getUserMedia = navigator.getUserMedia || //
+    navigator.webkitGetUserMedia || /////////////////
+    navigator.mozGetUserMedia; ////////////////////// Firefox
+
+
+  if (navigator.getUserMedia) {
+
+    navigator
+      .getUserMedia(
+        { audio: true, video: { width: 1280, height: 720 } },
+
+        (stream) => {
+
+          // 
+          ////////////////////////////// For VIDEO element //////////////////////////////////
+
+          var videoLocal = document.querySelector('#videoLocal');
+          videoLocal.srcObject = stream;
+          videoLocal.onloadedmetadata = (e) => videoLocal.play();
+          log('stream.getVideoTracks() --> ', stream.getVideoTracks())
+
+          //////////////////////////////// get BLOB data ////////////////////////////////////
+          //
+          // use MediaStream Recording API
+          const recorder = new MediaRecorder(stream);
+          // fires every one second and passes an BlobEvent
+          recorder.ondataavailable = event => {
+            // get the Blob from the event
+            const blob = event.data;
+            // and send that blob to the server...
+            socket.emit('blob', blob)
+          };
+          // make data available event fire every one second
+          recorder.start(1000);
+        },
+
+        (err) => { log("The following error occurred: " + err.name) }
+
+      )
+  } else log("getUserMedia not supported");
+};
+
+export { VideoConnection };
+export { getVideoStream };
+
+
+
+
+
+
+
+
+
+
+
+
+/*let localConnection;
 let remoteConnection;
 let sendChannel;
 let receiveChannel;
@@ -156,3 +230,4 @@ function onReceiveChannelStateChange() {
   const readyState = receiveChannel.readyState;
   console.log(`Receive channel state is: ${readyState}`);
 }
+*/

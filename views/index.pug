@@ -20,9 +20,28 @@ block content
       br
       .smiles
       br
+      button(id= 'videoButton') Video
       button(id= 'messageButton') sendMessage
       input(id= 'files', type='file', name='files[]', multiple='')
       output(id= 'list')
     .right
+      video(id= 'videoLocal')
+      video(id= 'videoRemote')
+      video(id= 'videoPlay', controls, src='/UDa_rRxAUrdGHGrdAAAA')
       .allMessages
+  section(id= 'container')
+    span Transmit text
+    #buttons
+      button#startButton Start
+      button#sendButton(disabled='') Send
+      button#closeButton(disabled='') Stop
+    #sendReceive
+      #send
+        h2 Send
+        textarea#dataChannelSend(disabled='', placeholder='Press Start, enter some text, then press Send.')
+      #receive
+        h2 Receive
+        textarea#dataChannelReceive(disabled='')
+
+
 
