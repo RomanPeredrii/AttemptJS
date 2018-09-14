@@ -25,9 +25,13 @@ block content
       input(id= 'files', type='file', name='files[]', multiple='')
       output(id= 'list')
     .right
-      video(id= 'videoLocal')
-      video(id= 'videoRemote')
-      video(id= 'videoPlay', controls, src='/UDa_rRxAUrdGHGrdAAAA')
+      video(id= 'videoLocal', controls)
+      canvas(id= 'canvasLocal')
+      br
+      video(id= 'videoRemote', controls)
+      canvas(id= 'canvasRemote')
+      img(id= 'imageRemoteBase64')
+      //- video(id= 'videoPlay', controls)
       .allMessages
   section(id= 'container')
     span Transmit text

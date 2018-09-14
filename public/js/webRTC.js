@@ -2,30 +2,57 @@ const log = console.log;
 
 var binaryVideoData = [];
 
- var getVideoStream = function () {
+var getVideoStream = function () {
   let videoRemote = document.querySelector('#videoRemote');
+  let canvasRemote = document.querySelector('#canvasRemote');
+  let imageRemoteBase64 = document.querySelector('#imageRemoteBase64');
+
+  socket.on('streamImg', (imageBase64) => {
+    log('DATA: ', imageBase64);
+
+    imageRemoteBase64.src=imageBase64;
+
+    //let ctxR = canvasRemote.getContext('2d');
+    //  let w = videoLocal.videoWidth / 4;
+    // let h = videoLocal.videoHeight / 4;
+    // canvasRemote.width = w;
+    //  canvasRemote.height = h;
+    //  ctxR.drawImage(imageBase64, 0, 0, w, h);
+
+  });
+
+  //let videoPlay = document.querySelector('#videoPlay');
+  /*
+     setInterval(function() {  
+       videoRemote.pause();
+   
+      // source.setAttribute('src', 'http://www.tools4movies.com/trailers/1012/Despicable%20Me%202.mp4'); 
+      videoRemote.src = '/videoBuff';
+      videoRemote.load();
+      videoRemote.play();
+   }, 3000);*/
+
   socket.on('stream', (data) => {
     binaryVideoData.push(data);
+    //log('CONTROL', data);
+    videoRemote.src = window.URL.createObjectURL(new Blob(binaryVideoData, { type: 'video/webm' }));
+    //videoRemote.play();
+    //videoPlay.src = '/videoBuff';
 
-
-    log('CONTROL', data);
-    videoRemote.src = window.URL.createObjectURL(new Blob(binaryVideoData, {type: 'video/webm'}));
-    videoRemote.play();
   });
 };
 
 var VideoConnection = function () {
 
-  navigator.getUserMedia = navigator.getUserMedia || //
-    navigator.webkitGetUserMedia || /////////////////
-    navigator.mozGetUserMedia; ////////////////////// Firefox
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
 
 
   if (navigator.getUserMedia) {
 
     navigator
       .getUserMedia(
-        { audio: true, video: { width: 1280, height: 720 } },
+        { audio: false, video: { width: 1280, height: 720 } },
 
         (stream) => {
 
@@ -36,6 +63,29 @@ var VideoConnection = function () {
           videoLocal.srcObject = stream;
           videoLocal.onloadedmetadata = (e) => videoLocal.play();
           log('stream.getVideoTracks() --> ', stream.getVideoTracks())
+          ////////////////////////////// For CANVAS //////////////////////////////////
+
+          let canvasLocal = document.querySelector('#canvasLocal');
+          let ctx = canvasLocal.getContext('2d');
+          setInterval(() => snapshot(), 40);
+          function snapshot() {
+            let w = videoLocal.videoWidth / 4;
+            let h = videoLocal.videoHeight / 4;
+            canvasLocal.width = w;
+            canvasLocal.height = h;
+            ctx.drawImage(videoLocal, 0, 0, w, h);
+            let imageBase64 = ctx.canvas.toDataURL("image/webp", 1);
+
+            socket.emit('imgBase64', imageBase64);
+            //let ctxR = canvasRemote.getContext('2d');
+            //canvasRemote.width = w;
+            //canvasRemote.height = h;
+            //ctxR.drawImage(imageBase64, 0, 0, w, h);
+
+
+
+            //log(ctx.canvas.toDataURL("image/webp", 0.5));
+          }
 
           //////////////////////////////// get BLOB data ////////////////////////////////////
           //
@@ -45,11 +95,12 @@ var VideoConnection = function () {
           recorder.ondataavailable = event => {
             // get the Blob from the event
             const blob = event.data;
+
             // and send that blob to the server...
             socket.emit('blob', blob)
           };
           // make data available event fire every one second
-          recorder.start(1000);
+          recorder.start(6000);
         },
 
         (err) => { log("The following error occurred: " + err.name) }

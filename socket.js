@@ -26,15 +26,24 @@ var io = require('socket.io')(serverIo);
 io.on('connection', function (client) {
   clients.push(client);
   //fs.openSync('./buff/'+ client.id, 'w');
+  fs.writeFile('./public/videoBuff','',() => {});
   client.emit('onConnect', 'Connected');
   /***************************************/
+  client.on('imgBase64', function (imageBase64) {
+
+    log('DATA: ', imageBase64);
+    client.broadcast.emit('streamImg', imageBase64);
+    client.emit('streamImg', imageBase64);
+
+  });
+  /*****************************************/
   client.on('blob', function (data) {
     log('CLIENT', client.id);
-    //fs.appendFile('./buff/'+ client.id, data, () => {});
+
+    fs.appendFile('./public/videoBuff', data, () => {});
     log('data: ', data);
     client.broadcast.emit('stream', data);
     client.emit('stream', data);
-
   });
   /****************************************/
   client.on('disconnect', function () {
