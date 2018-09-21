@@ -48,7 +48,7 @@ io.on('connection', function (client) {
     //fs.appendFile('./public/videoBuff', data, () => {});
     //log('data: ', data);
     client.broadcast.emit('audioStream', audioData);
-    client.emit('audioStream', audioData);
+    //client.emit('audioStream', audioData);
   });
   /*******************************************************/
 

@@ -18,10 +18,12 @@ var getVideoStream = function () {
 
 var getAudioStream = function () {
   socket.on('audioStream', (audioData) => {
-
     log('AUDIO DATA', audioData);
-    //soundRemote.srcObject = audioData[0];
-  } );
+    var blob = new Blob([audioData], { 'type': 'audio/ogg; codecs=opus' });
+    soundRemote.src = window.URL.createObjectURL(blob);
+    soundRemote.play();
+    //soundRemote.srcObject = audioData;
+  });
 };
 
 
@@ -33,43 +35,20 @@ var SoundConnection = function () {
   if (navigator.getUserMedia) {
     navigator.getUserMedia({ audio: true, video: false }, (stream) => {
       ////////////////////////////// For AUDIO element //////////////////////////////////
-     
       soundLocal.srcObject = stream;
-
-      let JSONStream = JSON.stringify(stream.getAudioTracks());
-      socket.emit('stream', JSONStream);
       log('AUDIO ', stream)
+      let blobArray = [];
+      const recorder = new MediaRecorder(stream);
+      recorder.ondataavailable = event => {
+        blobArray.push(event.data)
+        var blob = new Blob(blobArray, { 'type': 'audio/ogg; codecs=opus' });
+        log('AUDIOblob ', blob);
+        socket.emit('stream', blob);
+      };
+      recorder.start(6000);
 
 
-
-      // videoLocal.onloadedmetadata = (e) => videoLocal.play();
-      // log('stream.getVideoTracks() --> ', stream.getVideoTracks())
-
-
-
-      //soundRemote.srcObject = stream;
-
-
-
-
-      //////////////////////////////// get BLOB data ////////////////////////////////////
-
-      // use MediaStream Recording API
-      //const recorder = new MediaRecorder(stream);
-      // fires every one second and passes an BlobEvent
-      //recorder.ondataavailable = event => {
-      // get the Blob from the event
-      //const blob = event.data;
-      // and send that blob to the server...
-      //socket.emit('blob', blob)
-      // };
-      // make data available event fire every one second
-      //recorder.start(1000);
-    },
-
-      (err) => { log("The following error occurred: " + err.name) }
-
-    )
+    }, (err) => { log("The following error occurred: " + err.name) })
   } else log("getUserMedia not supported");
 };
 
@@ -81,8 +60,6 @@ var VideoConnection = function () {
   if (navigator.getUserMedia) {
     navigator.getUserMedia({ audio: false, video: { width: 320, height: 180 } }, (stream) => {
       ////////////////////////////// For VIDEO element //////////////////////////////////
-
-
       videoLocal.srcObject = stream;
       videoLocal.onloadedmetadata = (e) => videoLocal.play();
       log('stream.getVideoTracks() --> ', stream.getVideoTracks())
@@ -99,20 +76,6 @@ var VideoConnection = function () {
         let imageBase64 = ctx.canvas.toDataURL("image/webp", 1);
         socket.emit('imgBase64', imageBase64);
       }
-
-      //////////////////////////////// get BLOB data ////////////////////////////////////
-
-      // use MediaStream Recording API
-      //const recorder = new MediaRecorder(stream);
-      // fires every one second and passes an BlobEvent
-      //recorder.ondataavailable = event => {
-      // get the Blob from the event
-      //const blob = event.data;
-      // and send that blob to the server...
-      //socket.emit('blob', blob)
-      // };
-      // make data available event fire every one second
-      //recorder.start(1000);
     },
 
       (err) => { log("The following error occurred: " + err.name) }
