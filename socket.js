@@ -12,9 +12,9 @@ if (moment().format('a') === 'pm') {
 }
 
 var logFileName = './logs/' + moment().format('YY_MM_DD_') + hh + moment().format('_mm') + '.txt';
-log(logFileName);
+//log(logFileName);
 const fs = require('fs');
-fs.openSync(logFileName, 'w');
+//fs.openSync(logFileName, 'w');
 
 log(dateTime());
 
@@ -26,26 +26,32 @@ var io = require('socket.io')(serverIo);
 io.on('connection', function (client) {
   clients.push(client);
   //fs.openSync('./buff/'+ client.id, 'w');
-  fs.writeFile('./public/videoBuff','',() => {});
+  //fs.writeFile('./public/videoBuff','',() => {});
   client.emit('onConnect', 'Connected');
-  /***************************************/
+  /********************VIDEO IMG*******************/
   client.on('imgBase64', function (imageBase64) {
-
-    log('DATA: ', imageBase64);
     client.broadcast.emit('streamImg', imageBase64);
     client.emit('streamImg', imageBase64);
-
   });
-  /*****************************************/
+  /****************************************
   client.on('blob', function (data) {
-    log('CLIENT', client.id);
-
-    fs.appendFile('./public/videoBuff', data, () => {});
+    //log('CLIENT', client.id);
+    //fs.appendFile('./public/videoBuff', data, () => {});
     log('data: ', data);
     client.broadcast.emit('stream', data);
     client.emit('stream', data);
   });
   /****************************************/
+  /***********************AUDIO***************************/
+  client.on('stream', function (audioData) {
+    log('AUDIO', audioData);
+    //fs.appendFile('./public/videoBuff', data, () => {});
+    //log('data: ', data);
+    client.broadcast.emit('audioStream', audioData);
+    client.emit('audioStream', audioData);
+  });
+  /*******************************************************/
+
   client.on('disconnect', function () {
     clientsListRefresh();
   });
@@ -91,8 +97,6 @@ io.on('connection', function (client) {
   client.on('uploadFile', (binaryFile) => {
     var base64Data = binaryFile.replace(/^data:image\/jpeg;base64,/, "");
     fs.writeFile("buff.jpeg", base64Data, 'binary', function (err) {
-
-
       //fs.writeFile("buff.jpeg", base64Data, 'base64', function (err) {
       if (err) {
         log(err); throw err
@@ -103,7 +107,5 @@ io.on('connection', function (client) {
   })
 });
 serverIo.listen(3001);
-
-
 
 module.exports = {};

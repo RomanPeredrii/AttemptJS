@@ -8,7 +8,7 @@ const socket = io.connect('http://localhost:3001');
 const setNameButton = document.querySelector('#setNameButton');
 const message = document.querySelector('#message');
 const videoButton = document.querySelector('#videoButton');
-
+const soundButton = document.querySelector('#soundButton');
 window.socket = socket;
 
 import { setName } from './chatFunction.js';
@@ -17,8 +17,14 @@ setNameButton.addEventListener('click', () => setName(socket));
 import { VideoConnection } from './webRTC.js';
 videoButton.addEventListener('click', () => VideoConnection());
 
+import { SoundConnection } from './webRTC.js';
+soundButton.addEventListener('click', () => SoundConnection());
+
 import { getVideoStream } from './webRTC.js';
 getVideoStream();
+
+import { getAudioStream } from './webRTC.js';
+getAudioStream();
 
 import { sendMessage } from './chatFunction.js';
 messageButton.addEventListener('click', () => sendMessage(socket));

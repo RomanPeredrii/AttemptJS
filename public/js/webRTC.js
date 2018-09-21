@@ -1,116 +1,130 @@
 const log = console.log;
 
 var binaryVideoData = [];
+let videoRemote = document.querySelector('#videoRemote');
+let canvasRemote = document.querySelector('#canvasRemote');
+let imageRemoteBase64 = document.querySelector('#imageRemoteBase64');
+var videoLocal = document.querySelector('#videoLocal');
+videoLocal.style.display = 'none';
+var soundLocal = document.querySelector('#soundLocal');
+var soundRemote = document.querySelector('#soundRemote');
+
 
 var getVideoStream = function () {
-  let videoRemote = document.querySelector('#videoRemote');
-  let canvasRemote = document.querySelector('#canvasRemote');
-  let imageRemoteBase64 = document.querySelector('#imageRemoteBase64');
-
   socket.on('streamImg', (imageBase64) => {
-    log('DATA: ', imageBase64);
-
-    imageRemoteBase64.src=imageBase64;
-
-    //let ctxR = canvasRemote.getContext('2d');
-    //  let w = videoLocal.videoWidth / 4;
-    // let h = videoLocal.videoHeight / 4;
-    // canvasRemote.width = w;
-    //  canvasRemote.height = h;
-    //  ctxR.drawImage(imageBase64, 0, 0, w, h);
-
-  });
-
-  //let videoPlay = document.querySelector('#videoPlay');
-  /*
-     setInterval(function() {  
-       videoRemote.pause();
-   
-      // source.setAttribute('src', 'http://www.tools4movies.com/trailers/1012/Despicable%20Me%202.mp4'); 
-      videoRemote.src = '/videoBuff';
-      videoRemote.load();
-      videoRemote.play();
-   }, 3000);*/
-
-  socket.on('stream', (data) => {
-    binaryVideoData.push(data);
-    //log('CONTROL', data);
-    videoRemote.src = window.URL.createObjectURL(new Blob(binaryVideoData, { type: 'video/webm' }));
-    //videoRemote.play();
-    //videoPlay.src = '/videoBuff';
-
+    imageRemoteBase64.src = imageBase64;
   });
 };
 
-var VideoConnection = function () {
+var getAudioStream = function () {
+  socket.on('audioStream', (audioData) => {
 
+    log('AUDIO DATA', audioData);
+    //soundRemote.srcObject = audioData[0];
+  } );
+};
+
+
+
+
+
+var SoundConnection = function () {
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-
-
   if (navigator.getUserMedia) {
+    navigator.getUserMedia({ audio: true, video: false }, (stream) => {
+      ////////////////////////////// For AUDIO element //////////////////////////////////
+     
+      soundLocal.srcObject = stream;
 
-    navigator
-      .getUserMedia(
-        { audio: false, video: { width: 1280, height: 720 } },
-
-        (stream) => {
-
-          // 
-          ////////////////////////////// For VIDEO element //////////////////////////////////
-
-          var videoLocal = document.querySelector('#videoLocal');
-          videoLocal.srcObject = stream;
-          videoLocal.onloadedmetadata = (e) => videoLocal.play();
-          log('stream.getVideoTracks() --> ', stream.getVideoTracks())
-          ////////////////////////////// For CANVAS //////////////////////////////////
-
-          let canvasLocal = document.querySelector('#canvasLocal');
-          let ctx = canvasLocal.getContext('2d');
-          setInterval(() => snapshot(), 40);
-          function snapshot() {
-            let w = videoLocal.videoWidth / 4;
-            let h = videoLocal.videoHeight / 4;
-            canvasLocal.width = w;
-            canvasLocal.height = h;
-            ctx.drawImage(videoLocal, 0, 0, w, h);
-            let imageBase64 = ctx.canvas.toDataURL("image/webp", 1);
-
-            socket.emit('imgBase64', imageBase64);
-            //let ctxR = canvasRemote.getContext('2d');
-            //canvasRemote.width = w;
-            //canvasRemote.height = h;
-            //ctxR.drawImage(imageBase64, 0, 0, w, h);
+      let JSONStream = JSON.stringify(stream.getAudioTracks());
+      socket.emit('stream', JSONStream);
+      log('AUDIO ', stream)
 
 
 
-            //log(ctx.canvas.toDataURL("image/webp", 0.5));
-          }
+      // videoLocal.onloadedmetadata = (e) => videoLocal.play();
+      // log('stream.getVideoTracks() --> ', stream.getVideoTracks())
 
-          //////////////////////////////// get BLOB data ////////////////////////////////////
-          //
-          // use MediaStream Recording API
-          const recorder = new MediaRecorder(stream);
-          // fires every one second and passes an BlobEvent
-          recorder.ondataavailable = event => {
-            // get the Blob from the event
-            const blob = event.data;
 
-            // and send that blob to the server...
-            socket.emit('blob', blob)
-          };
-          // make data available event fire every one second
-          recorder.start(6000);
-        },
 
-        (err) => { log("The following error occurred: " + err.name) }
+      //soundRemote.srcObject = stream;
 
-      )
+
+
+
+      //////////////////////////////// get BLOB data ////////////////////////////////////
+
+      // use MediaStream Recording API
+      //const recorder = new MediaRecorder(stream);
+      // fires every one second and passes an BlobEvent
+      //recorder.ondataavailable = event => {
+      // get the Blob from the event
+      //const blob = event.data;
+      // and send that blob to the server...
+      //socket.emit('blob', blob)
+      // };
+      // make data available event fire every one second
+      //recorder.start(1000);
+    },
+
+      (err) => { log("The following error occurred: " + err.name) }
+
+    )
   } else log("getUserMedia not supported");
 };
 
+
+
+var VideoConnection = function () {
+  videoLocal.style.display = 'block';
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  if (navigator.getUserMedia) {
+    navigator.getUserMedia({ audio: false, video: { width: 320, height: 180 } }, (stream) => {
+      ////////////////////////////// For VIDEO element //////////////////////////////////
+
+
+      videoLocal.srcObject = stream;
+      videoLocal.onloadedmetadata = (e) => videoLocal.play();
+      log('stream.getVideoTracks() --> ', stream.getVideoTracks())
+      ////////////////////////////// For CANVAS //////////////////////////////////
+      let canvasLocal = document.querySelector('#canvasLocal');
+      let ctx = canvasLocal.getContext('2d');
+      setInterval(() => snapshot(), 40);
+      function snapshot() {
+        let w = videoLocal.videoWidth;
+        let h = videoLocal.videoHeight;
+        canvasLocal.width = w;
+        canvasLocal.height = h;
+        ctx.drawImage(videoLocal, 0, 0, w, h);
+        let imageBase64 = ctx.canvas.toDataURL("image/webp", 1);
+        socket.emit('imgBase64', imageBase64);
+      }
+
+      //////////////////////////////// get BLOB data ////////////////////////////////////
+
+      // use MediaStream Recording API
+      //const recorder = new MediaRecorder(stream);
+      // fires every one second and passes an BlobEvent
+      //recorder.ondataavailable = event => {
+      // get the Blob from the event
+      //const blob = event.data;
+      // and send that blob to the server...
+      //socket.emit('blob', blob)
+      // };
+      // make data available event fire every one second
+      //recorder.start(1000);
+    },
+
+      (err) => { log("The following error occurred: " + err.name) }
+
+    )
+  } else log("getUserMedia not supported");
+};
+
+export { SoundConnection };
 export { VideoConnection };
 export { getVideoStream };
+export { getAudioStream };
 
 
 

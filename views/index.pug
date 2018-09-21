@@ -21,14 +21,17 @@ block content
       .smiles
       br
       button(id= 'videoButton') Video
+      button(id= 'soundButton') Sounds
       button(id= 'messageButton') sendMessage
       input(id= 'files', type='file', name='files[]', multiple='')
       output(id= 'list')
     .right
+      audio(id= 'soundLocal', autoplay, controls, muted)
+      audio(id= 'soundRemote', autoplay, controls, muted)
       video(id= 'videoLocal', controls)
       canvas(id= 'canvasLocal')
       br
-      video(id= 'videoRemote', controls)
+      //-video(id= 'videoRemote', controls)
       canvas(id= 'canvasRemote')
       img(id= 'imageRemoteBase64')
       //- video(id= 'videoPlay', controls)
