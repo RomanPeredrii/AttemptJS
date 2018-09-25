@@ -8,20 +8,26 @@ var videoLocal = document.querySelector('#videoLocal');
 videoLocal.style.display = 'none';
 var soundLocal = document.querySelector('#soundLocal');
 var soundRemote = document.querySelector('#soundRemote');
+var soundTEST = document.querySelector('#soundTEST');
 
-
+let counter = 0;
 
 
 var getAudioStream = function () {
-  socket.on('audioStream', (audioData) => {
+  socket.on('audioStream', audioData => {
     log('AUDIO DATA', audioData);
     var blob = new Blob([audioData], { 'type': 'audio/ogg; codecs=opus' });
     soundRemote.src = window.URL.createObjectURL(blob);
-    log('AUDIO DATA', soundRemote.src);
+    soundRemote.currentTime = counter;
     soundRemote.play();
+    counter++;
   });
 };
 
+
+var stopSound = function () {
+  window.recorder.stop();
+};
 
 var SoundConnection = function () {
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -30,19 +36,24 @@ var SoundConnection = function () {
       ////////////////////////////// For AUDIO element //////////////////////////////////
       soundLocal.srcObject = stream;
       log('AUDIO ', stream)
+
+
+
       let blobArray = [];
-      const recorder = new MediaRecorder(stream);
+      const recorder = window.recorder = new MediaRecorder(stream);
       recorder.ondataavailable = event => {
         blobArray.push(event.data);
-        log('AUDIOblob ', blobArray.length);
         var blob = new Blob(blobArray, { 'type': 'audio/ogg; codecs=opus' });
-        log('AUDIOblob ', blobArray);
+        log('AUDIOblob ', blob.size);
         log('AUDIOblob ', blob);
         socket.emit('stream', blob);
-        blobArray = [];
-        log('AUDIOblob ', blobArray);
+        log('RS', recorder.state);
+        soundTEST.src = window.URL.createObjectURL(blob);
+        soundTEST.play();
       };
       recorder.start(1000);
+
+
 
     }, (err) => { log("The following error occurred: " + err.name) })
   } else log("getUserMedia not supported");
@@ -86,4 +97,5 @@ export { SoundConnection };
 export { VideoConnection };
 export { getVideoStream };
 export { getAudioStream };
+export { stopSound };
 

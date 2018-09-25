@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
+    "jshint": "^2.9.6",
     "module": "^1.2.5",
     "moment": "^2.22.2",
     "morgan": "~1.9.0",

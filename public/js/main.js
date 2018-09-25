@@ -9,6 +9,8 @@ const setNameButton = document.querySelector('#setNameButton');
 const message = document.querySelector('#message');
 const videoButton = document.querySelector('#videoButton');
 const soundButton = document.querySelector('#soundButton');
+const soundReceiveButton = document.querySelector('#soundReceiveButton');
+const stopButton = document.querySelector('#stopButton');
 window.socket = socket;
 
 import { setName } from './chatFunction.js';
@@ -24,7 +26,10 @@ import { getVideoStream } from './webRTC.js';
 getVideoStream();
 
 import { getAudioStream } from './webRTC.js';
-getAudioStream();
+soundReceiveButton.addEventListener('click', () => getAudioStream());
+
+import { stopSound } from './webRTC.js';
+stopButton.addEventListener('click', () => stopSound());
 
 import { sendMessage } from './chatFunction.js';
 messageButton.addEventListener('click', () => sendMessage(socket));

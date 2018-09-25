@@ -27,8 +27,12 @@ block content
       output(id= 'list')
     .right
       audio(id= 'soundLocal', autoplay, controls, muted)
-      audio(id= 'soundRemote', autoplay, controls, muted)
+      button(id= 'soundReceiveButton')  Receive Sound
+      br
+      button(id= 'stopButton') Stop
+      audio(id= 'soundRemote', controls, muted)
       video(id= 'videoLocal', controls)
+      audio(id= 'soundTEST', controls)
       canvas(id= 'canvasLocal')
       br
       //-video(id= 'videoRemote', controls)
