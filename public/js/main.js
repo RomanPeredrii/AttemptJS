@@ -41,21 +41,13 @@ document.getElementById('files').addEventListener('change', (e) => {
 
  filesExecute(e, socket); 
 
-
 });
-
-
-
 
 
 messageButton.disabled = true;
 files.disabled = true;
 
-socket.on('onConnect', (message) => {
-
-    socket.emit('userMessage', 'SO WERE ARE HERE');
-
-});
+socket.on('onConnect', () => { socket.emit('userMessage', 'SO WERE ARE HERE')});
 
 socket.on('clientList', (clientList) => {
     clientsList.innerHTML = `<div></div>`;
@@ -70,7 +62,7 @@ socket.on('message', (parcel) => {
     allMessages.innerHTML += `<div>${parcel.dateTimeForChat} - ${parcel.nickname}: <br>  ${parcel.message} </div>`;
 });
 const smiles = document.querySelector('.smiles');
-let smileArray = '😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😗 😙 😚 🙂 🤗 🤩 🤔 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🤑 😲 ☹️ 🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 😳 🤪 😵 😡 😠 🤬 😷 🤒 🤕 🤢 🤮 🤧 😇 🤠 🤡 🤥 🤫 🤭 🧐 🤓 😈 👿 👹 👺 💀 👻 👽'
+let smileArray = '😁 😂 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😚 😐 😶 😏 😣 😥 😪 😫 😌 😜 😝 😒 😓 😔 😲 😖 😞 😤 😢 😭 😨 😩 😰 😱 😳 😵 😡 😠 😷 😇 😈 👿 👹 👺 💀 👻 👽 💩'
     .split(' ')
     .map((smile) => smiles.innerHTML += '<div class="smile">' + smile + '</div>');
 let smilesAllNodeList = document.querySelectorAll('.smiles');

@@ -9,19 +9,16 @@ var dateTime = () => { return (moment().locale('us').format('MMMM Do YYYY, hh:mm
 let hh = moment().format('hh');
 if (moment().format('a') === 'pm') {
   hh = +hh + 12;
-}
+};
 
 var logFileName = './logs/' + moment().format('YY_MM_DD_') + hh + moment().format('_mm') + '.txt';
 //log(logFileName);
 const fs = require('fs');
 //fs.openSync(logFileName, 'w');
-
 log(dateTime());
 
 var serverIo = http.createServer();
 var io = require('socket.io')(serverIo);
-
-
 
 io.on('connection', function (client) {
   clients.push(client);
@@ -56,7 +53,6 @@ io.on('connection', function (client) {
     clientsListRefresh();
   });
   client.on('userMessage', (message) => {
-
     if (client.nickname === undefined) client.nickname = 'guest';
 
     console.log('I get message from ', client.nickname, '-', message, dateTimeForChat);
@@ -101,9 +97,8 @@ io.on('connection', function (client) {
       if (err) {
         log(err); throw err
       }
-      log('Saved!');
+      log('Saved!')
     });
-
   })
 });
 serverIo.listen(3001);
