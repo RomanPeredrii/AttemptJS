@@ -99,7 +99,7 @@ io.on('connection', function (client) {
       }
       log('Saved!')
     });
-  })
+  });
 });
 serverIo.listen(3001);
 
