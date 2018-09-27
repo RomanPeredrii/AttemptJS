@@ -16,17 +16,18 @@ let counter = 0;
 var getAudioStream = function () {
   socket.on('audioStream', audioData => {
     log('AUDIO DATA', audioData);
-    var blob = new Blob([audioData], { 'type': 'audio/ogg; codecs=opus' });
+    var blob = new Blob([audioData], { 'type': 'audio/mp3; codecs=opus' });
     soundRemote.src = window.URL.createObjectURL(blob);
-    soundRemote.currentTime = counter;
+    // soundRemote.currentTime = counter;
     soundRemote.play();
-    counter++;
+    //counter++;
   });
+
 };
 
 
 var stopSound = function () {
-  window.recorder.stop();
+  // window.recorder.stop();
 };
 
 var SoundConnection = function () {
@@ -35,25 +36,31 @@ var SoundConnection = function () {
     navigator.getUserMedia({ audio: true, video: false }, (stream) => {
       ////////////////////////////// For AUDIO element //////////////////////////////////
       soundLocal.srcObject = stream;
-      log('AUDIO ', stream)
+      log('AUDIO ', stream);
 
 
-
+      setInterval(() => {
       let blobArray = [];
-      const recorder = window.recorder = new MediaRecorder(stream);
+      let recorder = window.recorder = new MediaRecorder(stream);
       recorder.ondataavailable = event => {
+        log('*****************START**********************************');
+        log('eventData', event.data);
         blobArray.push(event.data);
-        var blob = new Blob(blobArray, { 'type': 'audio/ogg; codecs=opus' });
-        log('AUDIOblob ', blob.size);
+        log('blobArray', blobArray);
+        log('blobArraylength ', blobArray.length);
+
+        var blob = new Blob(blobArray, { 'type': 'audio/mp3; codecs=opus' });
+        log('BLOBsize ', blob.size);
         log('AUDIOblob ', blob);
-        socket.emit('stream', blob);
         log('RS', recorder.state);
-        soundTEST.src = window.URL.createObjectURL(blob);
-        soundTEST.play();
+
+        log('*****************END*************************************');
+        if ((recorder.state === 'recording') && (blobArray.length > 0)) {
+          recorder.stop();
+          socket.emit('stream', blob);
+        }
       };
-      recorder.start(1000);
-
-
+      recorder.start(1000);}, 1000);
 
     }, (err) => { log("The following error occurred: " + err.name) })
   } else log("getUserMedia not supported");
