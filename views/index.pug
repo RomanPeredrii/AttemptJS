@@ -20,38 +20,23 @@ block content
       br
       .smiles
       br
-      button(id= 'videoButton') Video
-      button(id= 'soundButton') Sounds
       button(id= 'messageButton') sendMessage
       input(id= 'files', type='file', name='files[]', multiple='')
       output(id= 'list')
     .right
       audio(id= 'soundLocal', autoplay, controls, muted)
+      button(id= 'videoButton') Video
+      button(id= 'videoReceiveButton')  Receive Video
+      button(id= 'soundButton') Sounds
       button(id= 'soundReceiveButton')  Receive Sound
       br
-      button(id= 'stopButton') Stop
-      audio(id= 'soundRemote', controls, muted)
+      audio(id= 'soundRemote', controls)
       video(id= 'videoLocal', controls)
       canvas(id= 'canvasLocal')
-      br
       //-video(id= 'videoRemote', controls)
       canvas(id= 'canvasRemote')
       img(id= 'imageRemoteBase64')
       //- video(id= 'videoPlay', controls)
       .allMessages
-  section(id= 'container')
-    span Transmit text
-    #buttons
-      button#startButton Start
-      button#sendButton(disabled='') Send
-      button#closeButton(disabled='') Stop
-    #sendReceive
-      #send
-        h2 Send
-        textarea#dataChannelSend(disabled='', placeholder='Press Start, enter some text, then press Send.')
-      #receive
-        h2 Receive
-        textarea#dataChannelReceive(disabled='')
-
 
 

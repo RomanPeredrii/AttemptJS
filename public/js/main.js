@@ -10,7 +10,6 @@ const message = document.querySelector('#message');
 const videoButton = document.querySelector('#videoButton');
 const soundButton = document.querySelector('#soundButton');
 const soundReceiveButton = document.querySelector('#soundReceiveButton');
-const stopButton = document.querySelector('#stopButton');
 window.socket = socket;
 
 import { setName } from './chatFunction.js';
@@ -27,9 +26,6 @@ getVideoStream();
 
 import { getAudioStream } from './webRTC.js';
 soundReceiveButton.addEventListener('click', () => getAudioStream());
-
-import { stopSound } from './webRTC.js';
-stopButton.addEventListener('click', () => stopSound());
 
 import { sendMessage } from './chatFunction.js';
 messageButton.addEventListener('click', () => sendMessage(socket));
@@ -49,8 +45,8 @@ document.getElementById('files').addEventListener('change', (e) => {
 });
 
 
-messageButton.disabled = true;
-files.disabled = true;
+//messageButton.disabled = true;
+//files.disabled = true;
 
 socket.on('onConnect', () => { socket.emit('userMessage', 'SO WERE ARE HERE')});
 

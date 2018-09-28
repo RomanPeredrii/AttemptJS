@@ -1,33 +1,24 @@
 const log = console.log;
 
-var binaryVideoData = [];
-let videoRemote = document.querySelector('#videoRemote');
-let canvasRemote = document.querySelector('#canvasRemote');
+//var binaryVideoData = [];
+//let videoRemote = document.querySelector('#videoRemote');
+//let canvasRemote = document.querySelector('#canvasRemote');
 let imageRemoteBase64 = document.querySelector('#imageRemoteBase64');
 var videoLocal = document.querySelector('#videoLocal');
 videoLocal.style.display = 'none';
 var soundLocal = document.querySelector('#soundLocal');
+soundLocal.style.display = 'none';
 var soundRemote = document.querySelector('#soundRemote');
-var soundTEST = document.querySelector('#soundTEST');
-
-let counter = 0;
-
+soundRemote.style.display = 'none';
 
 var getAudioStream = function () {
+  //soundRemote.style.display = 'block';
   socket.on('audioStream', audioData => {
     log('AUDIO DATA', audioData);
     var blob = new Blob([audioData], { 'type': 'audio/mp3; codecs=opus' });
     soundRemote.src = window.URL.createObjectURL(blob);
-    // soundRemote.currentTime = counter;
     soundRemote.play();
-    //counter++;
   });
-
-};
-
-
-var stopSound = function () {
-  // window.recorder.stop();
 };
 
 var SoundConnection = function () {
@@ -39,8 +30,8 @@ var SoundConnection = function () {
       let blobArray;
       let recorder = window.recorder = new MediaRecorder(stream);
 
-      log('AUDIO ', stream);
-      recorder.start()
+      log('AUDIOstream ', stream);
+      recorder.start();
       recorder.onstart = () => {
         blobArray = [];
       };
@@ -59,23 +50,17 @@ var SoundConnection = function () {
         log('BLOBsize ', blob.size);
         log('AUDIOblob ', blob);
         socket.emit('stream', blob);
-        log('RS', recorder.state);
+        log('RecorderState', recorder.state);
         log('******************************END*************************************');
       };
-      /* if ((recorder.state === 'recording') && (blobArray.length > 0)) {
-         recorder.stop();
-         socket.emit('stream', blob);
-       }*/
-
+      
       setInterval(() => {
         recorder.stop();
-        recorder.start();        
+        recorder.start();
       }, 2000);
     }, (err) => { log("The following error occurred: " + err.name) })
   } else log("getUserMedia not supported");
 };
-
-
 
 var getVideoStream = function () {
   socket.on('streamImg', (imageBase64) => {
@@ -115,5 +100,4 @@ export { SoundConnection };
 export { VideoConnection };
 export { getVideoStream };
 export { getAudioStream };
-export { stopSound };
 
