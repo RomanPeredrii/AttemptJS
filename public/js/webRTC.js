@@ -36,35 +36,46 @@ var SoundConnection = function () {
     navigator.getUserMedia({ audio: true, video: false }, (stream) => {
       ////////////////////////////// For AUDIO element //////////////////////////////////
       soundLocal.srcObject = stream;
-      log('AUDIO ', stream);
-
-
-      setInterval(() => {
-      let blobArray = [];
+      let blobArray;
       let recorder = window.recorder = new MediaRecorder(stream);
+
+      log('AUDIO ', stream);
+      recorder.start()
+      recorder.onstart = () => {
+        blobArray = [];
+      };
+
       recorder.ondataavailable = event => {
-        log('*****************START**********************************');
+        log('*******************************START**********************************');
         log('eventData', event.data);
+
         blobArray.push(event.data);
         log('blobArray', blobArray);
         log('blobArraylength ', blobArray.length);
+      };
 
+      recorder.onstop = () => {
         var blob = new Blob(blobArray, { 'type': 'audio/mp3; codecs=opus' });
         log('BLOBsize ', blob.size);
         log('AUDIOblob ', blob);
+        socket.emit('stream', blob);
         log('RS', recorder.state);
-
-        log('*****************END*************************************');
-        if ((recorder.state === 'recording') && (blobArray.length > 0)) {
-          recorder.stop();
-          socket.emit('stream', blob);
-        }
+        log('******************************END*************************************');
       };
-      recorder.start(1000);}, 1000);
+      /* if ((recorder.state === 'recording') && (blobArray.length > 0)) {
+         recorder.stop();
+         socket.emit('stream', blob);
+       }*/
 
+      setInterval(() => {
+        recorder.stop();
+        recorder.start();        
+      }, 2000);
     }, (err) => { log("The following error occurred: " + err.name) })
   } else log("getUserMedia not supported");
 };
+
+
 
 var getVideoStream = function () {
   socket.on('streamImg', (imageBase64) => {
