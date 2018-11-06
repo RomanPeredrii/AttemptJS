@@ -52,11 +52,13 @@ io.on('connection', function (client) {
   client.on('disconnect', function () {
     clientsListRefresh();
   });
+
+  var dateTimeForChat = dateTime();
   client.on('userMessage', (message) => {
     if (client.nickname === undefined) client.nickname = 'guest';
 
     console.log('I get message from ', client.nickname, '-', message, dateTimeForChat);
-    var dateTimeForChat = dateTime();
+    
     let parcel = {
       message,
       nickname: client.nickname,
@@ -90,14 +92,25 @@ io.on('connection', function (client) {
     client.broadcast.emit('clientList', clientsFront);
   };
 
+  var buffFileName = 'buffers/' + moment().format('YYMMDD') + hh + moment().format('mmssSSS') + '.jpeg';
+  log(buffFileName);
+
   client.on('uploadFile', (binaryFile) => {
     var base64Data = binaryFile.replace(/^data:image\/jpeg;base64,/, "");
-    fs.writeFile("buff.jpeg", base64Data, 'binary', function (err) {
+    fs.writeFile('./public/' + buffFileName, base64Data, 'binary', function (err) {
       //fs.writeFile("buff.jpeg", base64Data, 'base64', function (err) {
       if (err) {
         log(err); throw err
       }
       log('Saved!')
+      let parcel = {
+        message : `<a href ="${buffFileName}" target="_blank"> link </a>`,
+        nickname: client.nickname,
+        dateTimeForChat,
+      }
+      let forReciveFile = parcel.nickname + ': ' + parcel.message + ' - ' + parcel.dateTimeForChat + '\n'
+      client.broadcast.emit('message', parcel);
+
     });
   });
 });

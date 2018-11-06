@@ -4,6 +4,7 @@ const log = console.log;
 const allMessages = document.querySelector('.allMessages');
 const clientsList = document.querySelector('.clientsList');
 const messageButton = document.querySelector('#messageButton');
+//const socket = io.connect('http://188.230.34.177:3001');
 const socket = io.connect('http://localhost:3001');
 const setNameButton = document.querySelector('#setNameButton');
 const message = document.querySelector('#message');

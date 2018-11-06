@@ -32,6 +32,7 @@ var SoundConnection = function () {
 
       log('AUDIOstream ', stream);
       recorder.start();
+      
       recorder.onstart = () => {
         blobArray = [];
       };
@@ -39,7 +40,6 @@ var SoundConnection = function () {
       recorder.ondataavailable = event => {
         log('*******************************START**********************************');
         log('eventData', event.data);
-
         blobArray.push(event.data);
         log('blobArray', blobArray);
         log('blobArraylength ', blobArray.length);
@@ -58,6 +58,7 @@ var SoundConnection = function () {
         recorder.stop();
         recorder.start();
       }, 2000);
+
     }, (err) => { log("The following error occurred: " + err.name) })
   } else log("getUserMedia not supported");
 };

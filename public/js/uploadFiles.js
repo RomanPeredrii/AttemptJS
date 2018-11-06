@@ -41,14 +41,15 @@ function filesExecute(e, socket) {
 
       // of to the next chunk
       chunkReaderBlock(offset, chunkSize, file);
-    }
+    };
+
 
     chunkReaderBlock = function (_offset, length, _file) {
       var r = new FileReader();
       var blob = _file.slice(_offset, length + _offset);
       r.onload = readEventHandler;
       r.readAsText(blob);
-    }
+    };
 
     // now let's start the read with the first block
     chunkReaderBlock(offset, chunkSize, file);
@@ -96,3 +97,14 @@ function filesExecute(e, socket) {
 export { filesExecute }
 //export { handleFileSelect }
 
+
+
+/**
+ * 
+ * @param {*} a - comment 1
+ * @param {*} b - comment2
+ */
+function xxx(a, b) {
+
+  a
+}
